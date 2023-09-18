@@ -40,7 +40,7 @@ class Vacancy:
             actual_list = sorted(vacancies_data, key=lambda d: d['salary'], reverse=True)
             i = 0
             while i < quantity:
-                print (actual_list[i]['name'], actual_list[i]['employer'], actual_list[i]['salary'], actual_list[i]['url'])
+                print(actual_list[i]['name'], actual_list[i]['employer'], actual_list[i]['salary'], actual_list[i]['url'])
                 i += 1
 
 
@@ -99,37 +99,37 @@ class FileOperation(File):
             content = []
             json.dump(content, outfile)
 
-    def created_hh_vacancy(vacant_list):
-        """
-        функция для создания экземпляров класса с HeadHunter
-        """
-        for vacancy in vacant_list['items']:
-            name = vacancy['name']
-            employer = vacancy['employer']['name']
-            if vacancy['salary']:
-                salary = vacancy['salary']['from']
-            else:
-                salary = 0
-            requirements = vacancy['snippet']['requirement']
-            responsibility = vacancy['snippet']['responsibility']
-            url = vacancy['alternate_url']
+def created_hh_vacancy(vacant_list):
+    """
+    функция для создания экземпляров класса с HeadHunter
+    """
+    for vacancy in vacant_list['items']:
+        name = vacancy['name']
+        employer = vacancy['employer']['name']
+        if vacancy['salary']:
+            salary = vacancy['salary']['from']
+        else:
+            salary = 0
+        requirements = vacancy['snippet']['requirement']
+        responsibility = vacancy['snippet']['responsibility']
+        url = vacancy['alternate_url']
+        vacancy_for_file = Vacancy(name, employer, salary, requirements, responsibility, url)
+        FileOperation.add_vacancy(vacancy_for_file)
+
+def created_sj_vacancy(vacant_list):
+    """
+    функция для создания экземпляров класса с Superjob
+    """
+    for vacancy in vacant_list['objects']:
+        try:
+            name = vacancy['profession']
+            employer = vacancy['client']['title']
+            salary = vacancy['payment_to']
+            requirements = vacancy['candidat']
+            responsibility = vacancy['vacancyRichText']
+            url = vacancy['link']
+        except KeyError:
+            pass
+        else:
             vacancy_for_file = Vacancy(name, employer, salary, requirements, responsibility, url)
             FileOperation.add_vacancy(vacancy_for_file)
-
-    def created_sj_vacancy(vacant_list):
-        """
-        функция для создания экземпляров класса с Superjob
-        """
-        for vacancy in vacant_list['objects']:
-            try:
-                name = vacancy['profession']
-                employer = vacancy['client']['title']
-                salary = vacancy['payment_to']
-                requirements = vacancy['candidat']
-                responsibility = vacancy['vacancyRichText']
-                url = vacancy['link']
-            except KeyError:
-                pass
-            else:
-                vacancy_for_file = Vacancy(name, employer, salary, requirements, responsibility, url)
-                FileOperation.add_vacancy(vacancy_for_file)

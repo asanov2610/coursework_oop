@@ -48,7 +48,7 @@ class SuperJobAPI(Platforms): #класс для получения ваканс
         vacancies_list = json.loads(data)
         return vacancies_list
 
-    def print_vacancies(self, vacancies_list):
+    def print_vacancies_info(self, vacancies_list):
         """
         Метод для вывода вакансий с платформы SuperJob
         """
